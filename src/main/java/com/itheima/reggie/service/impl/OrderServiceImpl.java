@@ -88,7 +88,7 @@ public class OrderServiceImpl extends ServiceImpl<OrdersMapper, Orders> implemen
         orders.setAmount(new BigDecimal(amount.get()));//总金额
         orders.setUserId(userId);
         orders.setNumber(String.valueOf(orderId));
-        orders.setUserName(user.getName());
+        orders.setUserName(user.getName() == null ? "" :user.getName());
         orders.setConsignee(addressBook.getConsignee());
         orders.setPhone(addressBook.getPhone());
         orders.setAddress((addressBook.getProvinceName() == null ? "" : addressBook.getProvinceName())

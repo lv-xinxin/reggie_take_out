@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.itheima.reggie.dto.DishDto;
 import com.itheima.reggie.entity.Dish;
 
+import java.util.List;
+
 public interface DishService extends IService<Dish> {
 
     //新增菜品,同时插入口味数据
@@ -13,4 +15,9 @@ public interface DishService extends IService<Dish> {
 
 
     public void updateWithFlavor(DishDto dishDto);
+
+    void delete(List<Long> ids);
+
+    void updateStatus(int status, List<Long> ids);
+
 }

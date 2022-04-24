@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -95,6 +96,22 @@ public class SetmealController {
 
         return R.success("套餐数据删除成功");
     }
+
+
+    /**
+     * 修改套餐状态：起售和停售
+     *
+     * @param status 1起售，0停售
+     * @param ids    套餐id
+     * @return 停售成功结果
+     */
+    @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache", allEntries = true)
+    public R<String> updateStatus(@PathVariable int status, @RequestParam List<Long> ids) {
+        setmealService.updateStatus(status, ids);
+        return R.success("停售成功");
+    }
+
 
     @GetMapping("/list")
     public R<List<Setmeal>> list(Setmeal setmeal) {

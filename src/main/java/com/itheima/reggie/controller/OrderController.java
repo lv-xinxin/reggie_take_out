@@ -1,5 +1,7 @@
 package com.itheima.reggie.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.itheima.reggie.common.R;
 
@@ -25,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -115,8 +118,11 @@ public class OrderController {
             // 根据userId 查询用户姓名
             Long userId = order.getUserId();
             User user = userService.getById(userId);
-            ordersDto.setUserName(user.getName());
-            ordersDto.setPhone(user.getPhone());
+            if (user != null) {
+                ordersDto.setUserName(user.getName());
+                ordersDto.setPhone(user.getPhone());
+            }
+
 
             // 获取地址信息
             Long addressBookId = order.getAddressBookId();
@@ -184,4 +190,6 @@ public class OrderController {
         pageDto.setRecords(collect);
         return R.success(pageDto);
     }
+
+
 }

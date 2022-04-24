@@ -105,6 +105,7 @@ public class ShoppingCartController {
         }
 
 
+
         ShoppingCart shoppingCart = shoppingCartService.getOne(wrapper);
 
         if (shoppingCart.getNumber() == 0) {

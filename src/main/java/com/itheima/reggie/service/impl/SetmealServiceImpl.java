@@ -1,6 +1,8 @@
 package com.itheima.reggie.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.reggie.dto.SetmealDto;
 import com.itheima.reggie.entity.Setmeal;
@@ -67,5 +69,19 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         lambdaQueryWrapper.in(SetmealDish::getSetmealId,ids);
         //删除关系表中的数据----setmeal_dish
         setmealDishService.remove(lambdaQueryWrapper);
+    }
+
+    /**
+     * 更新套餐状态
+     *
+     * @param status 菜品状态
+     * @param ids    套餐id
+     */
+    @Override
+    public void updateStatus(int status, List<Long> ids) {
+        LambdaUpdateWrapper<Setmeal> updateWrapper = Wrappers.lambdaUpdate(Setmeal.class);
+        updateWrapper.set(Setmeal::getStatus, status);
+        updateWrapper.in(Setmeal::getId, ids);
+        super.update(updateWrapper);
     }
 }
