@@ -129,7 +129,7 @@ public class DishController {
      * @return
      */
     @PutMapping
-//    @CacheEvict(value = "dishCache", allEntries = true)
+   @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> update(@RequestBody DishDto dishDto) {
         dishService.updateWithFlavor(dishDto);
 
@@ -152,7 +152,7 @@ public class DishController {
      * @return 停售成功结果
      */
     @PostMapping("/status/{status}")
-//    @CacheEvict(value = "dishCache", allEntries = true)
+   @CacheEvict(value = "dishCache", allEntries = true)
     public R<String> updateStatus(@PathVariable int status, @RequestParam List<Long> ids) {
         dishService.updateStatus(status, ids);
         return R.success("停售成功");
@@ -179,7 +179,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")
-//    @Cacheable(value = "dishCache", key = "#dish.categoryId + '_' + #dish.status")
+    @Cacheable(value = "dishCache", key = "#dish.categoryId + '_' + #dish.status")
     public R<List<DishDto>> list(Dish dish) {
 
         List<DishDto> dishDtoList=null;

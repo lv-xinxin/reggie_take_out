@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> save(@RequestBody SetmealDto setmealDto) {
         log.info("套餐信息：{}", setmealDto);
 
@@ -84,11 +86,39 @@ public class SetmealController {
     }
 
     /**
+     * 修改套餐
+     *
+     * @param setmealDto 套餐属性
+     * @return 更新菜品成功
+     */
+    @PutMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
+    public R<String> update(@RequestBody SetmealDto setmealDto) {
+        log.info("套餐信息为：{}", setmealDto);
+        setmealService.updateWithDish(setmealDto);
+        return R.success("更新套餐成功");
+    }
+    /**
+     * 根据id查询套餐信息和对应菜品信息
+     *
+     * @param id 套餐id
+     * @return 查询的套餐数据
+     */
+    @GetMapping("/{id}")
+    public R<SetmealDto> get(@PathVariable Long id) {
+        SetmealDto setmealDto = setmealService.getByIdWithDish(id);
+        return R.success(setmealDto);
+    }
+
+
+
+    /**
      * 删除套餐
      * @param ids
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache",allEntries = true)
     public R<String> delete(@RequestParam List<Long> ids){
         log.info("ids:{}",ids);
 
@@ -114,6 +144,7 @@ public class SetmealController {
 
 
     @GetMapping("/list")
+    @Cacheable(value = "stemealCache",key = "#setmeal.categoryId+'_'+ #setmeal.status")
     public R<List<Setmeal>> list(Setmeal setmeal) {
         log.info("setmeal:{}", setmeal);
         //条件构造器
